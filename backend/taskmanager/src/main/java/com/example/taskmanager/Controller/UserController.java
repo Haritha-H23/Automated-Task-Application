@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +29,23 @@ public class UserController {
     @Autowired 
     private UserService userService;
 
+    @Autowired
+    private UserRepo userRepo;
+
     @GetMapping("getAllUsers")
     public List<User> getAllUsers() {
         return userService.getAllUsersUser();
+    }
+
+    @GetMapping("/me")
+    public User getCurrentUser() {
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        return userRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
     
     @GetMapping("getUser/{id}")

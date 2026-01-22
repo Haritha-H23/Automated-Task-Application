@@ -60,48 +60,58 @@ public class TaskService {
 
     public Task updateTask(Long id, Task task) {
 
-        Task existingTask = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found"));
+    Task existingTask = taskRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Task not found"));
 
-        boolean statusChanged =
-                !existingTask.getStatus().equals(task.getStatus());
+    boolean statusChanged =
+            task.getStatus() != null &&
+            !existingTask.getStatus().equals(task.getStatus());
 
+    if (task.getTitle() != null)
         existingTask.setTitle(task.getTitle());
+
+    if (task.getDescription() != null)
         existingTask.setDescription(task.getDescription());
+
+    if (task.getPriority() != null)
         existingTask.setPriority(task.getPriority());
+
+    if (task.getDueDate() != null)
         existingTask.setDueDate(task.getDueDate());
+
+    if (task.getStatus() != null)
         existingTask.setStatus(task.getStatus());
 
-        Task updatedTask = taskRepository.save(existingTask);
+    Task updatedTask = taskRepository.save(existingTask);
 
-        taskLogService.createLog(id, "UPDATED");
+    taskLogService.createLog(id, "UPDATED");
+
+    notificationService.createNotification(
+            existingTask.getUser(),
+            "Task updated: " + existingTask.getTitle()
+    );
+
+    if (statusChanged) {
+
+        taskLogService.createLog(id, "STATUS_CHANGED");
 
         notificationService.createNotification(
                 existingTask.getUser(),
-                "Task updated: " + existingTask.getTitle()
+                "Task status changed to: " + existingTask.getStatus()
         );
 
-        if (statusChanged) {
-
-            taskLogService.createLog(id, "STATUS_CHANGED");
+        if ("COMPLETED".equalsIgnoreCase(existingTask.getStatus())) {
+            taskLogService.createLog(id, "COMPLETED");
 
             notificationService.createNotification(
                     existingTask.getUser(),
-                    "Task status changed to: " + task.getStatus()
+                    "Task completed: " + existingTask.getTitle()
             );
-
-            if ("COMPLETED".equalsIgnoreCase(task.getStatus())) {
-                taskLogService.createLog(id, "COMPLETED");
-
-                notificationService.createNotification(
-                        existingTask.getUser(),
-                        "Task completed: " + existingTask.getTitle()
-                );
-            }
         }
-
-        return updatedTask;
     }
+
+    return updatedTask;
+}
 
     public void deleteTask(Long id) {
 

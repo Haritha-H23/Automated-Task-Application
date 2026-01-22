@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.taskmanager.Entity.User;
 import com.example.taskmanager.Entity.UserPreference;
 
 public interface UserPreferenceRepo extends JpaRepository<UserPreference, Long> {

@@ -25,7 +25,7 @@ public class Task {
     @Column(columnDefinition = "TEXT")
     private String description;
     private String status;
-    private String priority;
+    private String priority="MEDIUM";
     private LocalDate dueDate;
 
     @ManyToOne
