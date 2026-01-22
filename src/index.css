@@ -11,3 +11,26 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.MuiOutlinedInput-root {
+  background-color: #ffffff;
+}
+
+.MuiOutlinedInput-root fieldset {
+  border-color: #b6c7da;
+}
+
+.MuiOutlinedInput-root:hover fieldset {
+  border-color: #06203a;
+}
+
+.MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #06203a;
+}
+
+.MuiInputLabel-root {
+  color: #06203a;
+}
+
+.MuiInputLabel-root.Mui-focused {
+  color: #06203a;
+}

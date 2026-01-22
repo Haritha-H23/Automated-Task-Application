@@ -1,0 +1,75 @@
+.vertical-menu{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    width: 300px;
+    height: 100vh;
+    background-color: #06203a;
+    border-right: 1px solid #151111;
+    color: skyblue;
+}
+.account{
+    display: flex;
+  align-items: center;       
+  gap: 12px;                
+}
+.profile-info{
+    display: flex;
+    flex-direction: column;
+}
+.profile-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: #e6f2ff;
+}
+
+.profile-email {
+  font-size: 13px;
+  color: #9cc9ff;
+  margin: 0;
+}
+.profile-avatar{
+     width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.menu{
+    display: flex;
+    border-top: 1px solid #9a9797;
+    flex-direction: column;
+    gap: 25px;
+    margin-top: 30px;
+    padding-top: 20px;
+    flex: 1;
+}
+.menu-item{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+}
+.menu-item span{
+  font-size: small;
+}
+.menu-item a{
+  text-decoration: none;
+  color: white;
+}
+.addTask {
+  margin-top: auto;
+  color: white;
+  border: none;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+}
+.account {
+  cursor: pointer;
+}
+
+.account:hover {
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+}

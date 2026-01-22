@@ -1,0 +1,115 @@
+.taskboard-container {
+  height: 100vh;
+  padding: 24px 32px;
+  background: #D3DAD9;
+  color: #1f1f1f;
+  font-family: "Inter", sans-serif;
+}
+
+/* Header */
+.taskboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.taskboard-header h2 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* Controls */
+.taskboard-controls {
+  display: flex;
+  gap: 12px;
+}
+
+.search-bar {
+  width: 260px;
+}
+
+/* Task List */
+.task-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Task Row */
+.task-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 8px;
+  border-bottom: 1px solid navy;
+  transition: background 0.15s ease;
+}
+
+.task-row:hover {
+  background: #cbd4df;
+}
+
+/* Completed */
+.task-row.completed {
+  opacity: 0.55;
+}
+
+.task-row.completed .task-title,
+.task-row.completed .task-desc {
+  text-decoration: line-through;
+}
+
+/* Task Content */
+.task-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.task-title {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.task-desc {
+  font-size: 13px;
+  color: #6b6b6b;
+  margin-top: 2px;
+}
+
+/* Meta */
+.task-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  font-size: 12px;
+  min-width: 110px;
+}
+
+/* Priority */
+.priority {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.priority.high {
+  background: #ffecec !important;
+  color: #c62828 !important;
+}
+
+.priority.medium {
+  background: #fff6e0 !important;
+  color: #a26a00 !important;
+}
+
+.priority.low {
+  background: #e9f5ff !important;
+  color: #1565c0 !important;
+}
+
+/* Date */
+.due-date {
+  color: #6b6b6b;
+}
