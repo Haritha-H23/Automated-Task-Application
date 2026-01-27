@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 import "./TaskPanel.css"
 import { Checkbox, TextField, Select, MenuItem } from "@mui/material";
 
 const TaskPanel = ({ mode = "all" }) => {
+  const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState(
@@ -98,7 +100,25 @@ const TaskPanel = ({ mode = "all" }) => {
       </div>
 
       <div className="task-list">
-        {filteredTasks.map(task => (
+        {filteredTasks.length === 0 ? (
+    <div className="empty-state">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/4076/4076508.png"
+        alt="No tasks"
+        className="empty-image"
+      />
+      <h3>No tasks yet</h3>
+      <p>Create a new task to get started</p>
+
+      <button
+        className="empty-cta"
+        onClick={() => navigate("/dashboard/tasks/new")}
+      >
+        + Create Task
+      </button>
+    </div>
+  ) :(
+        filteredTasks.map(task => (
           <div
             key={task.id}
             className={`task-row ${
@@ -127,7 +147,7 @@ const TaskPanel = ({ mode = "all" }) => {
               )}
             </div>
           </div>
-        ))}
+        )))}
       </div>
 
     </div>

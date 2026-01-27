@@ -6,9 +6,12 @@ import TaskPanel from "./tasks/TaskPanel";
 import TaskForm from "./tasks/TaskForm";
 import Notifications from "./notifications/Notifications";
 import UserPreference from "./preferences/UserPreference";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
+    <>
+    <Toaster position="top-right" />
     <BrowserRouter>
       <Routes>
 
@@ -31,6 +34,7 @@ function App() {
 
       </Routes>
     </BrowserRouter>
+    </>
   );
 }
 

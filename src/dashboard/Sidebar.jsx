@@ -13,6 +13,7 @@ import React from 'react'
 const Sidebar = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState({});
+    const BASE_URL = "http://localhost:8080";
    
 
   const addTask = () => {
@@ -27,7 +28,15 @@ const Sidebar = () => {
     <div>
         <div className='vertical-menu'>
             <div className="account" onClick={() => navigate("/dashboard/settings")}>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541" alt="User Avatar" className="profile-avatar" />
+                <img
+              src={
+                user.profileImage
+                  ? `${BASE_URL}${user.profileImage}`
+                  : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
+              }
+              alt="avatar"
+              className="profile-avatar"
+            />
             <div className="profile-info">
                 <p className="profile-name">{user.username}</p>
                 <p className="profile-email">{user.email}</p>
@@ -48,11 +57,11 @@ const Sidebar = () => {
           </div>
           <div className="menu-item">
             <span><SettingsIcon /></span>
-            <a href="/preferences">Settings</a>
+            <a href="/dashboard/settings">Settings</a>
           </div>
           <div className="menu-item">
             <span><NotificationImportantIcon /></span>
-            <a href="/notifications">Notifications</a>
+            <a href="/dashboard/notifications">Notifications</a>
           </div>
         </div>
         <Button variant="text" startIcon={<AddIcon />}
