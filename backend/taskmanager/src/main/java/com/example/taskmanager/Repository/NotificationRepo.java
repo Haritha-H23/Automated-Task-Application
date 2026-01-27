@@ -8,4 +8,6 @@ import com.example.taskmanager.Entity.Notification;
 
 public interface NotificationRepo extends JpaRepository<Notification, Long> {
     List<Notification> findByUserId(Long userId);
+
+    List<Notification> findByUserIdAndIsReadFalse(Long userId);
 }

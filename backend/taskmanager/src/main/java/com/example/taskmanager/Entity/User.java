@@ -24,5 +24,7 @@ public class User {
     private String password;
     private String phone;
     private LocalDateTime createdAt=LocalDateTime.now();
+    @Column(name = "profile_image")
+    private String profileImage;
     
 }

@@ -16,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -23,34 +24,33 @@ public class JwtFilter extends OncePerRequestFilter {
     private JwtUtil jwtUtil;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+    ) throws ServletException, IOException {
+        
+        String path = request.getRequestURI();
 
+    if (
+        path.startsWith("/api/auth") ||
+        path.startsWith("/uploads")
+    ) {
+        filterChain.doFilter(request, response);
+        return;
+    }
+
+    System.out.println("🔥 JwtFilter HIT for: " + path);
         String authHeader = request.getHeader("Authorization");
-
-        // Skip /api/auth/**
-        if (request.getRequestURI().startsWith("/api/auth")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        String token = null;
-        String email = null;
+        System.out.println("AUTH HEADER = " + authHeader);
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.substring(7);
-            email = jwtUtil.extractEmail(token);
-        }
+            String token = authHeader.substring(7);
+            String email = jwtUtil.extractEmail(token);
 
-        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-            if (jwtUtil.validateToken(token)) {
+            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(email, null, new ArrayList<>());
-
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        new UsernamePasswordAuthenticationToken(email, null, List.of());
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }

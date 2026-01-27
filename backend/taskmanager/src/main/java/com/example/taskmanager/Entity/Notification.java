@@ -24,6 +24,8 @@ public class Notification {
 
     private boolean isRead = false;
 
+    private String type; 
+    
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne

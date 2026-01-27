@@ -20,15 +20,17 @@ public class NotificationService {
     @Autowired
     private UserRepo userRepo;
 
-    public Notification createNotification(User user, String message) {
-        Notification notification = new Notification();
-        notification.setUser(user);
-        notification.setMessage(message);
-        notification.setCreatedAt(LocalDateTime.now());
-        notification.setRead(false);
+    public Notification createNotification(User user, String type, String message) {
+    Notification notification = new Notification();
+    notification.setUser(user);
+    notification.setType(type);
+    notification.setMessage(message);
+    notification.setCreatedAt(LocalDateTime.now());
+    notification.setRead(false);
 
-        return notificationRepo.save(notification);
-    }
+    return notificationRepo.save(notification);
+  }
+
 
     public List<Notification> getNotificationsByUser(Long userId) {
         return notificationRepo.findByUserId(userId);
@@ -45,4 +47,10 @@ public class NotificationService {
     public void deleteNotification(Long id) {
         notificationRepo.deleteById(id);
     }
+
+
+    public List<Notification> getUnreadNotifications(Long userId) {
+    return notificationRepo.findByUserIdAndIsReadFalse(userId);
+}
+
 }

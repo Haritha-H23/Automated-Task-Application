@@ -6,9 +6,11 @@ import com.example.taskmanager.Repository.TaskRepo;
 import com.example.taskmanager.Repository.UserRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -42,10 +44,6 @@ public class TaskService {
 
         taskLogService.createLog(savedTask.getId(), "CREATED");
 
-        notificationService.createNotification(
-                user,
-                "New task created: " + savedTask.getTitle()
-        );
 
         return savedTask;
     }
@@ -86,26 +84,18 @@ public class TaskService {
 
     taskLogService.createLog(id, "UPDATED");
 
-    notificationService.createNotification(
-            existingTask.getUser(),
-            "Task updated: " + existingTask.getTitle()
-    );
 
     if (statusChanged) {
 
         taskLogService.createLog(id, "STATUS_CHANGED");
 
-        notificationService.createNotification(
-                existingTask.getUser(),
-                "Task status changed to: " + existingTask.getStatus()
-        );
-
         if ("COMPLETED".equalsIgnoreCase(existingTask.getStatus())) {
             taskLogService.createLog(id, "COMPLETED");
 
             notificationService.createNotification(
-                    existingTask.getUser(),
-                    "Task completed: " + existingTask.getTitle()
+               existingTask.getUser(),
+               "COMPLETED",
+               "Task completed: " + existingTask.getTitle()
             );
         }
     }
@@ -120,11 +110,54 @@ public class TaskService {
 
         taskLogService.createLog(id, "DELETED");
 
-        notificationService.createNotification(
-                task.getUser(),
-                "Task deleted: " + task.getTitle()
-        );
-
         taskRepository.delete(task);
     }
+    @Scheduled(cron = "0 30 9 * * *")
+public void notifyOverdueTasks() {
+
+    LocalDate today = LocalDate.now();
+
+    List<Task> overdueTasks =
+            taskRepository.findByDueDateBeforeAndStatus(today, "PENDING");
+
+    for (Task task : overdueTasks) {
+        notificationService.createNotification(
+                task.getUser(),
+                "OVERDUE",
+                "Task overdue: " + task.getTitle()
+        );
+    }
+}
+    @Scheduled(cron = "0 0 8 * * *")
+public void sendDailySummary() {
+
+    List<User> users = userRepo.findAll();
+
+    for (User user : users) {
+
+        long pending =
+                taskRepository.countByUserAndStatus(user, "PENDING");
+
+        long completed =
+                taskRepository.countByUserAndStatus(user, "COMPLETED");
+
+        long overdue =
+                taskRepository.countByUserAndDueDateBeforeAndStatus(
+                        user, LocalDate.now(), "PENDING"
+                );
+
+        String message = String.format(
+                "Daily Summary: %d pending, %d completed, %d overdue",
+                pending, completed, overdue
+        );
+
+        notificationService.createNotification(
+                user,
+                "DAILY_SUMMARY",
+                message
+        );
+    }
+}
+
+
 }
