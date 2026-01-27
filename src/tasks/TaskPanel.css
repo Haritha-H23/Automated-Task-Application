@@ -155,3 +155,29 @@
 .due-date {
   color: #6b6b6b;
 }
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: none;
+  background: #1E4F91;
+  color: #fff;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background: #6b8fb8;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-size: 14px;
+  color: #1f1f1f;
+}

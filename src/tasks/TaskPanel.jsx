@@ -7,16 +7,22 @@ import { Checkbox, TextField, Select, MenuItem } from "@mui/material";
 const TaskPanel = ({ mode = "all" }) => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState(
     mode === "today" ? "priority" : "date"
   );
 
   useEffect(() => {
-    api.get("/api/tasks/allTasks")
-      .then(res => setTasks(res.data))
-      .catch(err => console.error(err));
-  }, []);
+  api.get(`/api/tasks/allTasks?page=${page}&size=10`)
+  .then(res => {
+    setTasks(res.data.content);
+    setTotalPages(res.data.totalPages);
+  })
+    .catch(err => console.error(err));
+}, [page]);
+
 
   const toggleStatus = async (task) => {
     const updatedTask = {
@@ -149,7 +155,27 @@ const TaskPanel = ({ mode = "all" }) => {
           </div>
         )))}
       </div>
+      {filteredTasks.length > 0 && (
+      <div className="pagination">
+  <button
+    disabled={page === 0}
+    onClick={() => setPage(prev => prev - 1)}
+  >
+    Previous
+  </button>
 
+  <span>
+    Page {page + 1} of {totalPages}
+  </span>
+
+  <button
+    disabled={page === totalPages - 1}
+    onClick={() => setPage(prev => prev + 1)}
+  >
+    Next
+  </button>
+</div>)}
+ 
     </div>
   );
 };
