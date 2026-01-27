@@ -3,6 +3,7 @@ package com.example.taskmanager.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +32,8 @@ public class TaskController {
     }
 
     @GetMapping("/allTasks")
-    public List<Task> getTasksByUser() {
-        return taskService.getAllTasks();
+    public Page<Task> getTasksByUser(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size) {
+        return taskService.getAllTasks(page, size);
     }
 
     @PutMapping("/{id}")

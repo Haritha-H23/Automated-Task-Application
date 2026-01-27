@@ -3,6 +3,8 @@ package com.example.taskmanager.Repository;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.taskmanager.Entity.Task;
@@ -10,6 +12,13 @@ import com.example.taskmanager.Entity.User;
 
 public interface TaskRepo extends JpaRepository<Task, Long> {
 
+    Page<Task> findByUserEmail(String email, Pageable pageable);
+
+    Page<Task> findByUserEmailAndPriority(
+            String email,
+            String priority,
+            Pageable pageable
+    );
     List<Task> findByUserEmail(String email);
 
     List<Task> findByDueDateBeforeAndStatus(LocalDate today, String string);

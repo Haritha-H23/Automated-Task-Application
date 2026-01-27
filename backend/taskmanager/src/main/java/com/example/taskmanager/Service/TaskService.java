@@ -6,6 +6,9 @@ import com.example.taskmanager.Repository.TaskRepo;
 import com.example.taskmanager.Repository.UserRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -48,12 +51,15 @@ public class TaskService {
         return savedTask;
     }
 
-    public List<Task> getAllTasks() {
+    public Page<Task> getAllTasks(int page, int size) {
         String email = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
 
-        return taskRepository.findByUserEmail(email);
+        return taskRepository.findByUserEmail(
+          email,
+          PageRequest.of(page, size)
+        );
     }
 
     public Task updateTask(Long id, Task task) {
@@ -159,5 +165,16 @@ public void sendDailySummary() {
     }
 }
 
+     public Page<Task> getTasksPaginated(int page, int size) {
+
+    String email = SecurityContextHolder
+            .getContext()
+            .getAuthentication()
+            .getName();
+
+    Pageable pageable = PageRequest.of(page, size);
+
+    return taskRepository.findByUserEmail(email, pageable);
+}
 
 }
