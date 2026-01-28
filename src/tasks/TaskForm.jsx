@@ -10,7 +10,8 @@ import "./TaskForm.css";
 
 const TaskForm = () => {
   const navigate = useNavigate();
-
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [task, setTask] = useState({
     title: "",
     description: "",
@@ -22,10 +23,10 @@ const TaskForm = () => {
   const [recentTasks, setRecentTasks] = useState([]);
 
   useEffect(() => {
-    api.get("/api/tasks/allTasks")
-      .then(res => setRecentTasks(res.data.slice(0, 5)))
+    api.get(`/api/tasks/allTasks?page=${page}&size=10`)
+      .then(res => setRecentTasks(res.data.content))
       .catch(() => console.log("Failed to load recent tasks"));
-  }, []);
+  }, [page]);
 
   const handleChange = (e) => {
     setTask({ ...task, [e.target.name]: e.target.value });
